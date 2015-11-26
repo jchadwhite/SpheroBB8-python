@@ -16,10 +16,14 @@ BB8joyDrive.py
 Allow you to drive BB8 with a joystick/gamepad.
 Shows on screen feedback of analog stick as well as speed and heading
 Currently setup for a Xbox 360 controller.
-Left analog stick controls BB8's movement, much the like app!
-Holding the Left trigger stops BB8
-Tapping the Left bumper changes BB8's heading - used to calibration
-Holding the Right bumper turns on BB8's blue 'tail light' to aid in calibration
+
+-Left analog stick controls BB8's movement, much the like app!
+
+-Holding the Left trigger stops BB8.
+
+-Tapping the Left bumper changes BB8's heading - used to calibration.
+
+-Holding the Right bumper turns on BB8's blue 'tail light' to aid in calibration.
 
 
 Adapted the sphero driver library from:
