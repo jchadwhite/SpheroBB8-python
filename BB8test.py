@@ -6,7 +6,7 @@ import BB8_driver
 import sys
 bb8 = BB8_driver.Sphero()
 bb8.connect()
-bb8.set_raw_data_strm(40, 1 , 0, False)
+
 
 bb8.start()
 time.sleep(2)
