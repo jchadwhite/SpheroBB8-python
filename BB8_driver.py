@@ -863,69 +863,69 @@ class Sphero(threading.Thread):
         self.raw_data_buf = data
 
 
-def parse_pwr_notify(self, data, data_length):
-    '''
-    The data payload of the async message is 1h bytes long and
-    formatted as follows::
-
-      --------
-      |State |
-      --------
-
-    The power state byte:
-      * 01h = Battery Charging,
-      * 02h = Battery OK,
-      * 03h = Battery Low,
-      * 04h = Battery Critical
-    '''
-    return struct.unpack_from('B', ''.join(data[5:]))[0]
-
-
-def parse_collision_detect(self, data, data_length):
-    '''
-    The data payload of the async message is 10h bytes long and
-    formatted as follows::
-
-      -----------------------------------------------------------------
-      |X | Y | Z | AXIS | xMagnitude | yMagnitude | Speed | Timestamp |
-      -----------------------------------------------------------------
-
-    * X, Y, Z - Impact components normalized as a signed 16-bit\
-    value. Use these to determine the direction of collision event. If\
-    you don't require this level of fidelity, the two Magnitude fields\
-    encapsulate the same data in pre-processed format.
-    * Axis - This bitfield specifies which axes had their trigger\
-    thresholds exceeded to generate the event. Bit 0 (01h) signifies\
-    the X axis and bit 1 (02h) the Y axis.
-    * xMagnitude - This is the power that crossed the programming\
-    threshold Xt + Xs.
-    * yMagnitude - This is the power that crossed the programming\
-    threshold Yt + Ys.
-    * Speed - The speed of Sphero when the impact was detected.
-    * Timestamp - The millisecond timer value at the time of impact;\
-    refer to the documentation of CID 50h and 51h to make sense of\
-    this value.
-    '''
-    output = {}
-
-    output['X'], output['Y'], output['Z'], output['Axis'], output['xMagnitude'], output['yMagnitude'], output[
-        'Speed'], output['Timestamp'] = struct.unpack_from('>hhhbhhbI', ''.join(data[5:]))
-    return output
+    def parse_pwr_notify(self, data, data_length):
+        '''
+        The data payload of the async message is 1h bytes long and
+        formatted as follows::
+    
+          --------
+          |State |
+          --------
+    
+        The power state byte:
+          * 01h = Battery Charging,
+          * 02h = Battery OK,
+          * 03h = Battery Low,
+          * 04h = Battery Critical
+        '''
+        return struct.unpack_from('B', ''.join(data[5:]))[0]
 
 
-def parse_data_strm(self, data, data_length):
-    output = {}
-    for i in range((data_length - 1) / 2):
-        unpack = struct.unpack_from('>h', ''.join(data[5 + 2 * i:]))
-        output[self.mask_list[i]] = unpack[0]
-    print self.mask_list
-    print output
-    return output
+    def parse_collision_detect(self, data, data_length):
+        '''
+        The data payload of the async message is 10h bytes long and
+        formatted as follows::
+    
+          -----------------------------------------------------------------
+          |X | Y | Z | AXIS | xMagnitude | yMagnitude | Speed | Timestamp |
+          -----------------------------------------------------------------
+    
+        * X, Y, Z - Impact components normalized as a signed 16-bit\
+        value. Use these to determine the direction of collision event. If\
+        you don't require this level of fidelity, the two Magnitude fields\
+        encapsulate the same data in pre-processed format.
+        * Axis - This bitfield specifies which axes had their trigger\
+        thresholds exceeded to generate the event. Bit 0 (01h) signifies\
+        the X axis and bit 1 (02h) the Y axis.
+        * xMagnitude - This is the power that crossed the programming\
+        threshold Xt + Xs.
+        * yMagnitude - This is the power that crossed the programming\
+        threshold Yt + Ys.
+        * Speed - The speed of Sphero when the impact was detected.
+        * Timestamp - The millisecond timer value at the time of impact;\
+        refer to the documentation of CID 50h and 51h to make sense of\
+        this value.
+        '''
+        output = {}
+    
+        output['X'], output['Y'], output['Z'], output['Axis'], output['xMagnitude'], output['yMagnitude'], output[
+            'Speed'], output['Timestamp'] = struct.unpack_from('>hhhbhhbI', ''.join(data[5:]))
+        return output
 
 
-def disconnect(self):
-    self.is_connected = False
-    #self.bt.disconnect()
-    self.bt.peripheral.disconnect()
-    return self.is_connected
+    def parse_data_strm(self, data, data_length):
+        output = {}
+        for i in range((data_length - 1) / 2):
+            unpack = struct.unpack_from('>h', ''.join(data[5 + 2 * i:]))
+            output[self.mask_list[i]] = unpack[0]
+        print self.mask_list
+        print output
+        return output
+
+
+    def disconnect(self):
+        self.is_connected = False
+        #self.bt.disconnect()
+        self.bt.peripheral.disconnect()
+        return self.is_connected
 
